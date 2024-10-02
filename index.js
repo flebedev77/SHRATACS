@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = 3000;
-const { nc } = require("./nc");
+// const { nc } = require("./nc");
 const bodyparser = require("body-parser");
 
 app.use(express.static("public"));
@@ -11,32 +11,32 @@ app.use(bodyparser.text());
 const io = require("socket.io")(app.listen(PORT, console.log(`Server listening on port ${PORT}`)));
 
 let currentCommand = "";
-let previousCommand = "";
+// let previousCommand = "";
 
-nc.stdout.on("data", (data) => {
-    console.log(`stdout: ${data}`);
-    io.sockets.emit("log", data.toString("ascii"));
-});
+// nc.stdout.on("data", (data) => {
+//     console.log(`stdout: ${data}`);
+//     io.sockets.emit("log", data.toString("ascii"));
+// });
 
-// Handle stderr
-nc.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
-    io.sockets.emit("log", data.toString("ascii"));
-});
+// // Handle stderr
+// nc.stderr.on("data", (data) => {
+//     console.error(`stderr: ${data}`);
+//     io.sockets.emit("log", data.toString("ascii"));
+// });
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 })
 
 app.get("/cmd/:command", (req, res) => {
-    const cmd = req.params.command;
-    if (cmd.trim() == "") {
-        res.send("Bad command");
-        return;
-    }
+    // const cmd = req.params.command;
+    // if (cmd.trim() == "") {
+    //     res.send("Bad command");
+    //     return;
+    // }
 
-    nc.stdin.write(cmd + "\n");
-    res.send("ok");
+    // nc.stdin.write(cmd + "\n");
+    // res.send("ok");
 })
 
 io.on("connection", (socket) => {
@@ -60,6 +60,6 @@ app.post("/send-output", (req, res) => {
 app.get("/get-command", (req, res) => {
     res.set("Content-Type", "text/plain");
     res.send(currentCommand);
-    previousCommand = currentCommand;
+    // previousCommand = currentCommand;
     currentCommand = "";
 })
