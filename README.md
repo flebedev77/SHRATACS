@@ -13,3 +13,6 @@ You might need to write a custom RAT, essentially the rat needs to continously m
 
 #### Replying with output
 Once the RAT has the output of the command ran, it can send the output to the server's `/send-output` route using a `POST` request and in `plain/text` for the server to recognise the output correctly.
+
+### Changing the password
+The default password is `smoke`. To change it, delete the `pass` file and rerun the server. It will then prompt you to make a new password, it will then store it in a new `pass` file.
