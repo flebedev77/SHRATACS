@@ -23,17 +23,6 @@ sendButton.onclick = function() {
     }).catch(err => {
         textarea.textContent += err;
     })
-    
-    // fetch(window.location.origin + "/cmd/" + encodeURIComponent(`${commandInput.value}`)).then(res => {
-    //     if (res.ok) return res.text();
-    //     else {
-    //         alert ("Problem");
-    //     }
-    // }).then(data => {
-    //     if (data != "ok") textarea.textContent += data;
-    // }).catch((err) => {
-    //     textarea.textContent += err;
-    // })
 }
 
 const overlayParent = document.getElementById("overlay-parent");
@@ -48,7 +37,7 @@ loginButton.onclick = function() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ password: passwordInput.value })
+        body: JSON.stringify({ password: passwordInput.value, socketId: socket.id })
     }).then(res => {
         if (res.ok) return res.json();
         else console.error(res.statusText)
@@ -67,7 +56,7 @@ window.onload = function() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ password: null })
+        body: JSON.stringify({ password: null, socketId: socket.id })
     }).then(res => {
         if (res.ok) return res.json();
         else console.error(res.statusText);

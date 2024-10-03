@@ -41,6 +41,7 @@ if (!fs.existsSync(passHashFilePath)) {
 
 let currentCommand = "";
 let authenticatedCookies = [];
+let authenticatedSocketIds = [];
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
@@ -61,7 +62,10 @@ app.post("/send-ui-command-to-backend", (req, res) => {
 
 app.post("/send-output", (req, res) => {
     const processed = req.body + "\n";
-    io.sockets.emit("log", processed);
+    authenticatedSocketIds.forEach((id) => {
+        console.log(id)
+        io.to(id).emit("log", processed);
+    })
     res.set("Content-Type", "text/plain");
     res.send("Received");
 })
@@ -104,6 +108,10 @@ app.post("/auth", (req, res) => {
                 secure: false,   // Optional: use this if your site is HTTPS
                 sameSite: 'Lax' // Optional: adjust based on your needs
             });
+
+            if (req.body.socketId != null && req.body.socketId.trim().length != 0) {
+                authenticatedSocketIds.push(req.body.socketId);
+            }
         } else {
             res.json({ ok: false, message: "Incorrect password" });
             return
